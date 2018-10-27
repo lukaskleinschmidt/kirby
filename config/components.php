@@ -2,13 +2,13 @@
 
 use Kirby\Cms\App;
 use Kirby\Cms\Model;
+use Kirby\Data\Data;
+use Kirby\Toolkit\F;
 use Kirby\Cms\Filename;
 use Kirby\Cms\Response;
 use Kirby\Cms\Template;
-use Kirby\Data\Data;
 use Kirby\Image\Darkroom;
 use Kirby\Text\SmartyPants;
-use Kirby\Toolkit\F;
 use Kirby\Toolkit\Tpl as Snippet;
 
 return [
@@ -81,8 +81,8 @@ return [
 
         return Snippet::load($file, $data);
     },
-    'template' => function (App $kirby, string $name, string $type = 'html') {
-        return new Template($name, $type);
+    'template' => function (App $kirby, string $name, string $type = 'html', string $defaultType = 'html') {
+        return new Template($name, $type, $defaultType);
     },
     'thumb' => function (App $kirby, string $src, string $dst, array $options) {
 
