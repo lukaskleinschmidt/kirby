@@ -1,0 +1,1 @@
+{"displayName":"IndexView","description":"","tags":{},"props":[{"name":"categories","type":{"name":"array"}},{"name":"info","type":{"name":"string"}},{"name":"tab","type":{"name":"string"}}],"component":"k-index-view","sourceFile":"src\\components\\Lab\\IndexView.vue"}

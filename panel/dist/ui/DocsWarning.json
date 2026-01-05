@@ -1,0 +1,1 @@
+{"displayName":"DocsWarning","description":"","tags":{},"props":[{"name":"icon","type":{"name":"string"},"defaultValue":{"value":"\"protected\""}},{"name":"title","type":{"name":"string"}},{"name":"text","type":{"name":"string"}}],"component":"k-docs-warning","sourceFile":"src\\components\\Lab\\DocsWarning.vue"}

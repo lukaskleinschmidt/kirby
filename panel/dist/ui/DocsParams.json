@@ -1,0 +1,1 @@
+{"displayName":"DocsParams","description":"","tags":{},"props":[{"name":"params","type":{"name":"array"},"defaultValue":{"value":"[]"}}],"component":"k-docs-params","sourceFile":"src\\components\\Lab\\DocsParams.vue"}

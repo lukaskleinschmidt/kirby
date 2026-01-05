@@ -1,0 +1,1 @@
+{"displayName":"Events","description":"","tags":{},"props":[{"name":"events","type":{"name":"array"},"defaultValue":{"value":"[]"}}],"component":"k-events","sourceFile":"src\\components\\Lab\\Docs\\Events.vue"}

@@ -1,0 +1,1 @@
+{"displayName":"DocsTypes","description":"","tags":{},"props":[{"name":"types","type":{"name":"array"},"defaultValue":{"value":"[]"}}],"component":"k-docs-types","sourceFile":"src\\components\\Lab\\DocsTypes.vue"}

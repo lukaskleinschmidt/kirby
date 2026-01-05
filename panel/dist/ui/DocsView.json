@@ -1,0 +1,1 @@
+{"displayName":"DocsView","description":"","tags":{},"props":[{"name":"buttons","type":{"name":"array"}},{"name":"component","type":{"name":"string"}},{"name":"docs","type":{"name":"object"}},{"name":"lab","type":{"name":"string"}}],"component":"k-docs-view","sourceFile":"src\\components\\Lab\\DocsView.vue"}

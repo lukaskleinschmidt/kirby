@@ -1,0 +1,1 @@
+{"displayName":"Slots","description":"","tags":{},"props":[{"name":"slots","type":{"name":"array"},"defaultValue":{"value":"[]"}}],"component":"k-slots","sourceFile":"src\\components\\Lab\\Docs\\Slots.vue"}

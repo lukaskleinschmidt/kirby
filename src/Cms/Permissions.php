@@ -54,10 +54,12 @@ class Permissions
 			'create'         => true,
 			'delete'         => true,
 			'duplicate'      => true,
+			'edit'           => true,
 			'list'           => true,
 			'move'           => true,
 			'preview'        => true,
 			'read'           => true,
+			'save'           => true,
 			'sort'           => true,
 			'update'         => true
 		],
@@ -130,7 +132,29 @@ class Permissions
 			return $default;
 		}
 
-		return $this->actions[$category][$action];
+		$permission = Permission::for($this->actions[$category][$action]);
+
+		if ($category === 'pages' && $action === 'edit') {
+			$permission = Permission::defined([
+				$this->actions['pages']['edit'],
+				$this->actions['pages']['update'],
+			]);
+		}
+
+		if ($category === 'pages' && $action === 'save') {
+			$permission = Permission::defined([
+				$this->actions['pages']['save'],
+				$this->actions['pages']['update'],
+			]);
+		}
+
+		// if ($category === 'pages' && $action === 'update') {
+		// 	Helpers::deprecated(
+		// 		'The "pages.update" permission is deprecated and will be removed in a future version. Please use "pages.edit" and "pages.save" instead.'
+		// 	);
+		// }
+
+		return $permission->value;
 	}
 
 	protected function hasAction(string $category, string $action): bool
@@ -158,7 +182,7 @@ class Permissions
 			return $this->setCategory($category, $setting);
 		}
 
-		$this->actions[$category][$action] = $setting;
+		$this->actions[$category][$action] = Permission::setting($setting);
 
 		return $this;
 	}
@@ -208,7 +232,7 @@ class Permissions
 		}
 
 		foreach ($this->actions[$category] as $action => $actionSetting) {
-			$this->actions[$category][$action] = $setting;
+			$this->actions[$category][$action] = Permission::wildcard($setting);
 		}
 
 		return $this;

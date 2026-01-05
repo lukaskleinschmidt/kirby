@@ -1,0 +1,1 @@
+{"displayName":"Methods","description":"","tags":{},"props":[{"name":"methods","type":{"name":"array"},"defaultValue":{"value":"[]"}}],"component":"k-methods","sourceFile":"src\\components\\Lab\\Docs\\Methods.vue"}

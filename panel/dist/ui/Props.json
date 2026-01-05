@@ -1,0 +1,1 @@
+{"displayName":"Props","description":"","tags":{},"props":[{"name":"props","type":{"name":"array"},"defaultValue":{"value":"[]"}}],"component":"k-props","sourceFile":"src\\components\\Lab\\Docs\\Props.vue"}
