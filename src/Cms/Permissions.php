@@ -107,6 +107,7 @@ class Permissions
 		// normalize core actions
 		$this->actions = $this->normalize(
 			settings: $settings,
+			defaults: $this->actions,
 			aliases: [
 				'files' => ['update' => $update],
 				'pages' => ['update' => $update],
@@ -128,82 +129,80 @@ class Permissions
 		}
 	}
 
-	protected function normalize(array|bool|null $settings, array $aliases = []): array
+	protected function normalize(array|bool|null $settings, array $defaults = [], array $aliases = []): array
 	{
-		$permissions = $this->actions;
-		$normalized = $settings;
+		$permissions = $defaults;
+		$normalized  = $settings;
 
 		// transform into wildcard
 		if (is_bool($normalized) === true) {
 			$normalized = ['*' => $normalized];
 		}
 
-		if (is_array($normalized) === true) {
-			// handle category wildcards
-			if (array_key_exists('*', $normalized) === true) {
-				$normalized += array_fill_keys(
-					array_keys($this->actions),
-					$normalized['*']
-				);
+		if (is_array($normalized) === false) {
+			return $permissions;
+		}
 
-				unset($normalized['*']);
+		// handle category wildcards
+		if (array_key_exists('*', $normalized) === true) {
+			$normalized += array_fill_keys(
+				array_keys($defaults),
+				$normalized['*']
+			);
+
+			unset($normalized['*']);
+		}
+
+		foreach ($normalized as $category => $actions) {
+			// skip undefined categories
+			if (isset($defaults[$category]) === false) {
+				continue;
 			}
 
-			foreach ($normalized as $category => $actions) {
-				// skip undefined categories
-				if (isset($this->actions[$category]) === false) {
-					continue;
-				}
+			// transform into wildcard
+			if (is_bool($actions) === true) {
+				$actions = ['*' => $actions];
+			}
 
-				// transform into wildcard
-				if (is_bool($actions) === true) {
-					$actions = ['*' => $actions];
-				}
+			if (is_array($actions) === false) {
+				continue;
+			}
 
-				if (is_array($actions) === false) {
-					continue;
-				}
+			// handle action wildcards
+			if (array_key_exists('*', $actions) === true) {
+				$actions += array_fill_keys(
+					array_keys($defaults[$category]),
+					$actions['*']
+				);
 
-				// handle action wildcards
-				if (array_key_exists('*', $actions) === true) {
-					$actions += array_fill_keys(
-						array_keys($this->actions[$category]),
-						$actions['*']
-					);
+				unset($actions['*']);
+			}
 
-					unset($actions['*']);
-				}
+			foreach ($actions as $action => $value) {
+				$permissions[$category][$action] = boolval($value);
+			}
 
-				foreach ($actions as $action => $value) {
-					$permissions[$category][$action] = boolval($value);
-				}
+			foreach ($permissions[$category] as $action => $value) {
+				$alias = $aliases[$category][$action] ?? null;
 
-				foreach ($permissions[$category] as $action => $value) {
-					// remove undefined actions
-					if (isset($this->actions[$category][$action]) === false) {
-						unset($permissions[$category][$action]);
+				if ($alias !== null) {
+					if (is_callable($alias) === true) {
+						$alias = $alias($value);
 					}
 
-					// check aliases but ignore any explicitly set actions
-					$alias = $aliases[$category][$action] ?? null;
+					if (is_array($alias) === false) {
+						$alias = [$alias => $value];
+					}
 
-					if ($alias !== null) {
-						if (is_callable($alias) === true) {
-							$alias = $alias($value);
-						}
-
-						if (is_array($alias) === false) {
-							$alias = [$alias => $value];
-						}
-
-						foreach ($alias as $action => $value) {
-							if (isset($settings[$category][$action]) === true) {
-								continue;
-							}
-
-							$permissions[$category][$action] = boolval($value);
+					foreach ($alias as $key => $value) {
+						if (isset($settings[$category][$key]) === false) {
+							$permissions[$category][$key] = boolval($value);
 						}
 					}
+				}
+
+				if (isset($defaults[$category][$action]) === false) {
+					unset($permissions[$category][$action]);
 				}
 			}
 		}
